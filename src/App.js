@@ -90,6 +90,7 @@ function App() {
       body: JSON.stringify({ query }),
     });
     const data = await res.json();
+    console.log(data);
     return data;
   };
 
