@@ -7,6 +7,7 @@ function App() {
   const [query, setQuery] = useState("");
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [noResults, setNoResults] = useState(false);
 
   // Default hardcoded movies
   const defaultMovies = [
@@ -90,24 +91,23 @@ function App() {
       body: JSON.stringify({ query }),
     });
     const data = await res.json();
-    console.log(data);
-    return data;
-  };
 
-  async function fetchWikiPoster(wikiLink) {
+    let text = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+
+    // Remove ```json and ``` wrapping
+    text = text
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .trim();
+
     try {
-      const title = wikiLink.split("/wiki/")[1];
-      const url = `https://en.wikipedia.org/w/api.php?action=query&titles=${title}&prop=pageimages&format=json&pithumbsize=500&origin=*`;
-      const res = await fetch(url);
-      const data = await res.json();
-      const pages = data.query.pages;
-      const page = Object.values(pages)[0];
-      return page?.thumbnail?.source || "./images/dummy.png";
+      const parsed = JSON.parse(text);
+      return parsed;
     } catch (err) {
-      console.error("Wiki API fetch error:", err);
-      return "";
+      console.error("Failed to parse Gemini response:", err, text);
+      return [];
     }
-  }
+  };
 
   const handleSearch = async () => {
     const searchTerm = query.trim();
@@ -117,18 +117,25 @@ function App() {
     }
 
     setIsSearching(true); // start search
+    setNoResults(false); // reset "no results"
 
     const geminiMovies = await fetchMovies(searchTerm);
 
-    const moviesWithImages = await Promise.all(
-      geminiMovies.map(async (movie) => ({
-        ...movie,
-        image: await fetchWikiPoster(movie.link),
-      }))
-    );
+    if (!geminiMovies || geminiMovies.length === 0) {
+      setFilteredMovies([]);
+      setIsSearching(false);
+      setNoResults(true); // indicate nothing found
+      return;
+    }
+
+    const moviesWithImages = geminiMovies.map((movie) => ({
+      ...movie,
+      image: "./images/dummy.png",
+    }));
 
     setFilteredMovies([...moviesWithImages, ...defaultMovies]);
     setIsSearching(false); // search complete
+    setNoResults(false);
   };
 
   const moviesToDisplay =
@@ -170,7 +177,10 @@ function App() {
       </div>
 
       {/* 🔹 Search status */}
-      <div className="search-status">{isSearching && <p>Searching</p>}</div>
+      <div className="search-status">
+        {isSearching && <p>Searching...</p>}
+        {!isSearching && noResults && <p>Nothing found</p>}
+      </div>
 
       <div className="movie-grid">
         {moviesToDisplay.map((movie, index) => (
