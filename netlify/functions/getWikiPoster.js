@@ -1,4 +1,3 @@
-import fetch from "node-fetch";
 import { JSDOM } from "jsdom";
 
 export async function handler(event, context) {
