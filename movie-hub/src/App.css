@@ -57,32 +57,156 @@ body {
   text-align: center;
 }
 
-.button-container {
+.wiki-button {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  margin-top: 10px;
-}
-
-.mega-button {
+  justify-content: center;
+  gap: 8px; /* space between logo and text */
   text-decoration: none;
-  background-color: #d9272e; /* Mega red */
-  color: rgba(0, 0, 0, 0.7);
-  font-weight: bold;
-  padding: 10px 15px;
-  border-radius: 8px;
-  text-align: center;
+  background-color: #414040;
+  color: #ffffff;
+  font-weight: normal;
+  padding: 10px 15px 10px 10px;
+  border-radius: 30px;
   transition: background-color 0.2s ease;
+}
+
+.wiki-button:hover {
+  background-color: #d8d2d3;
+  color: #2a2a2a;
+}
+
+.wiki-logo {
+  width: 20px;
+  height: 20px;
+  display: inline-block; /* keeps it aligned */
+  object-fit: contain; /* prevents distortion */
+}
+
+.footer {
+  margin-top: 40px;
+  padding: 15px 20px;
+  background-color: #1f1f1f;
+  color: #ddd;
+  text-align: center;
+  font-size: 14px;
+  border-top: 1px solid #333;
+}
+
+.footer a {
+  color: #ff4c4c; /* accent color */
+  text-decoration: none;
+  margin: 0 8px;
+  transition: color 0.2s ease;
+}
+
+.footer a:hover {
+  color: #fff;
+}
+
+.search-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  margin: 0px 0px 20px 0px;
+}
+
+.search-box {
+  background-color: #414040;
+  width: 330px;
+  height: 36px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-box-input {
+  font-size: 1rem;
+  width: 300px;
+  height: 30px;
+  border-radius: 15px;
+  background-color: #414040;
+  border: none;
+  outline: none;
+  color: #ddd;
+}
+
+.search-button-container {
+  background-color: #414040;
+  padding: 10px 5px 10px 5px;
+  width: 26px;
+  border-radius: 18px;
+  height: 16px;
+  display: flex; /* enables flexbox */
+  align-items: center; /* vertical centering */
+  justify-content: center; /* horizontal centering */
+}
+
+.search-button-container:hover {
+  background-color: #d8d2d3;
+  color: #2a2a2a;
+}
+
+.search-button {
+  background: none; /* no background */
+  border: none; /* no border */
+  padding: 0; /* remove padding */
+  margin: 0; /* remove margin */
+  cursor: pointer; /* show pointer on hover */
+}
+
+.search-button:hover .search-arrow {
+  color: #2a2a2a; /* hover color only on the icon */
+}
+
+.search-arrow {
+  color: #ddd; /* normal icon color */
+  font-size: 16px; /* adjust size as needed */
+}
+
+.search-status p {
+  margin-top: 0px;
+  font-size: 1rem;
+  color: #555;
   display: inline-block;
+  position: relative;
 }
 
-.mega-button:hover {
-  background-color: #b91c23;
+.search-status p::after {
+  content: "";
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  margin-left: 3px;
+  border-radius: 50%;
+  background-color: #555;
+  animation: dots 1s steps(4, end) infinite;
 }
 
-.mega-logo {
-  width: 25px;
-  height: auto;
-  margin-top: 10px;
-  opacity: 0.9;
+@keyframes dots {
+  0% {
+    box-shadow: 8px 0 0 transparent, 16px 0 0 transparent;
+  }
+  25% {
+    box-shadow: 8px 0 0 #555, 16px 0 0 transparent;
+  }
+  50% {
+    box-shadow: 8px 0 0 #555, 16px 0 0 #555;
+  }
+  75%,
+  100% {
+    box-shadow: 8px 0 0 #555, 16px 0 0 #555;
+    opacity: 0;
+  }
+}
+
+.site-description {
+  text-align: center;
+  margin: 10px auto 20px auto;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #666;
+  max-width: 1000px;
 }
