@@ -148,10 +148,22 @@ function App() {
 
     // Get poster images for each movie
     const moviesWithImages = await Promise.all(
-      geminiMovies.map(async (movie) => ({
-        ...movie,
-        image: await fetchWikiPoster(movie.link),
-      }))
+      geminiMovies.map(async (movie) => {
+        try {
+          const res = await fetch("/.netlify/functions/getWikiPoster", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ link: movie.link }),
+          });
+          const data = await res.json();
+          return {
+            ...movie,
+            image: data?.image || "./images/dummy.png",
+          };
+        } catch {
+          return { ...movie, image: "./images/dummy.png" };
+        }
+      })
     );
 
     setFilteredMovies([...moviesWithImages, ...defaultMovies]);
