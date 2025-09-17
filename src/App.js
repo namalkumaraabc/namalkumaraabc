@@ -178,7 +178,7 @@ function App() {
 
       {/* 🔹 Search status */}
       <div className="search-status">
-        {isSearching && <p>Searching...</p>}
+        {isSearching && <p>Searching</p>}
         {!isSearching && noResults && <p>Nothing found</p>}
       </div>
 
