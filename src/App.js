@@ -109,32 +109,53 @@ function App() {
     }
   };
 
+  // Fetch poster from Wikipedia for a given link
+  const fetchWikiPoster = async (wikiLink) => {
+    try {
+      const res = await fetch("/.netlify/functions/getWikiPoster", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ link: wikiLink }),
+      });
+      const data = await res.json();
+      return data.image || "./images/dummy.png";
+    } catch (err) {
+      console.error("Error fetching poster:", err);
+      return "./images/dummy.png";
+    }
+  };
+
+  // Handle search
   const handleSearch = async () => {
     const searchTerm = query.trim();
     if (!searchTerm) {
       setFilteredMovies([]);
+      setNoResults(false);
       return;
     }
 
-    setIsSearching(true); // start search
-    setNoResults(false); // reset "no results"
+    setIsSearching(true);
+    setNoResults(false);
 
     const geminiMovies = await fetchMovies(searchTerm);
 
     if (!geminiMovies || geminiMovies.length === 0) {
       setFilteredMovies([]);
       setIsSearching(false);
-      setNoResults(true); // indicate nothing found
+      setNoResults(true);
       return;
     }
 
-    const moviesWithImages = geminiMovies.map((movie) => ({
-      ...movie,
-      image: "./images/dummy.png",
-    }));
+    // Get poster images for each movie
+    const moviesWithImages = await Promise.all(
+      geminiMovies.map(async (movie) => ({
+        ...movie,
+        image: await fetchWikiPoster(movie.link),
+      }))
+    );
 
     setFilteredMovies([...moviesWithImages, ...defaultMovies]);
-    setIsSearching(false); // search complete
+    setIsSearching(false);
     setNoResults(false);
   };
 
