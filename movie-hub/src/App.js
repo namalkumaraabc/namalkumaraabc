@@ -83,43 +83,14 @@ function App() {
     },
   ];
 
-  // 🔹 Fetch top 3 related movies (name, description, wiki link) from Gemini
-  const fetchMoviesFromGemini = async (query) => {
-    try {
-      const response = await fetch(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-goog-api-key": "AIzaSyB9iI23pAPb1Ql_YfCfsqKXsKk5mUVd8-c",
-          },
-          body: JSON.stringify({
-            contents: [
-              {
-                parts: [
-                  {
-                    text: `Give me 3 movies related to "${query}". Return ONLY JSON as an array of objects with "name", "description", "link" (Wikipedia URL). Nothing else.`,
-                  },
-                ],
-              },
-            ],
-          }),
-        }
-      );
-
-      const data = await response.json();
-      const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
-
-      const cleanText = text
-        .replace(/```json/g, "")
-        .replace(/```/g, "")
-        .trim();
-      return JSON.parse(cleanText);
-    } catch (err) {
-      console.error("Gemini API error:", err);
-      return [];
-    }
+  const fetchMovies = async (query) => {
+    const res = await fetch("/.netlify/functions/getMovies", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query }),
+    });
+    const data = await res.json();
+    return data;
   };
 
   async function fetchWikiPoster(wikiLink) {
@@ -146,7 +117,7 @@ function App() {
 
     setIsSearching(true); // start search
 
-    const geminiMovies = await fetchMoviesFromGemini(searchTerm);
+    const geminiMovies = await fetchMovies(searchTerm);
 
     const moviesWithImages = await Promise.all(
       geminiMovies.map(async (movie) => ({
