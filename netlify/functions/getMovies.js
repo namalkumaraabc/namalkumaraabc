@@ -31,22 +31,7 @@ export async function handler(event, context) {
     );
 
     const data = await response.json();
-
-    // Optional: clean up ```json or ``` if present
-    let text = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
-    text = text
-      .replace(/```json/g, "")
-      .replace(/```/g, "")
-      .trim();
-
-    let parsed = [];
-    try {
-      parsed = JSON.parse(text);
-    } catch (err) {
-      console.error("Failed to parse Gemini response:", err, text);
-    }
-
-    return { statusCode: 200, body: JSON.stringify(parsed) };
+    return { statusCode: 200, body: JSON.stringify(data) };
   } catch (err) {
     return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
   }
