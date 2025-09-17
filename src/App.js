@@ -118,6 +118,7 @@ function App() {
         body: JSON.stringify({ link: wikiLink }),
       });
       const data = await res.json();
+      console.log(data);
       return data.image || "./images/dummy.png";
     } catch (err) {
       console.error("Error fetching poster:", err);
