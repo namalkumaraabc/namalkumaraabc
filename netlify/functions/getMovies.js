@@ -17,7 +17,7 @@ export async function handler(event, context) {
             {
               parts: [
                 {
-                  text: `Give me 3 movies related to "${query}". Return only JSON as an array of objects with exactly these fields: 
+                  text: `Give me all movies related to "${query}". Return only JSON as an array of objects with exactly these fields: 
                     "name" (movie title), 
                     "description" (short movie description), 
                     "link" (Wikipedia URL). 
