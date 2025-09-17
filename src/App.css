@@ -210,3 +210,11 @@ body {
   color: #666;
   max-width: 1000px;
 }
+
+.gemini-logo {
+  width: 20px;
+  height: 20px;
+  display: inline-block; /* keeps it aligned */
+  object-fit: contain; /* prevents distortion */
+  opacity: 60%;
+}

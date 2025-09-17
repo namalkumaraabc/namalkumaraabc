@@ -118,7 +118,7 @@ function App() {
         body: JSON.stringify({ link: wikiLink }),
       });
       const data = await res.json();
-      console.log(data);
+      // console.log(data);
       return data.image || "./images/dummy.png";
     } catch (err) {
       console.error("Error fetching poster:", err);
@@ -174,6 +174,11 @@ function App() {
         and links to related films. Whether you're a casual viewer or a film
         enthusiast, discover new movies, revisit classics, and stay updated with
         trending titles. All in one place!
+      </p>
+      <p className="site-description">
+        This app is powered by <strong>Google Gemini</strong>{" "}
+        <img src="images/gemini.png" alt="wiki Logo" className="gemini-logo" />{" "}
+        and AI may generate inaccurate information sometimes.
       </p>
       <div className="search-container">
         <div className="search-box">
